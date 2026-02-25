@@ -1,0 +1,196 @@
+,Pais/Territorio,PIB_Bilhoes
+0,Estados Unidos,25035.16
+1,China,18321.2
+2,Japão,4300.62
+3,Alemanha,4031.15
+4,Índia,3468.57
+5,Reino Unido,3198.47
+6,França,2778.09
+7,Canadá,2200.35
+8,Rússia,2133.09
+9,Itália,1996.93
+10,Irã,1973.74
+11,Brasil,1894.71
+12,Coreia do Sul,1734.21
+13,Austrália,1724.79
+14,México,1424.53
+15,Espanha,1389.93
+16,Indonésia,1289.43
+17,Arábia Saudita,1010.59
+18,Países Baixos,990.58
+19,Turquia,853.49
+20,Taiwan,828.66
+21,Suíça,807.42
+22,Polónia,716.3
+23,Argentina,630.7
+24,Suécia,603.92
+25,Bélgica,589.49
+26,Tailândia,534.76
+27,Israel,527.18
+28,Irlanda,519.78
+29,Noruega,504.7
+30,Nigéria,504.2
+31,Emirados Árabes Unidos,503.91
+32,Egito,469.09
+33,Áustria,468.05
+34,Bangladesh,460.75
+35,Malásia,434.06
+36,Singapura,423.63
+37,Vietname,413.81
+38,África do Sul,411.48
+39,Filipinas,401.66
+40,Dinamarca,386.72
+41,Paquistão,376.49
+42,Hong Kong,368.37
+43,Colômbia,342.92
+44,Chile,310.87
+45,Roménia,299.88
+46,Chéquia,295.62
+47,Iraque,282.88
+48,Finlândia,281.41
+49,Portugal,255.85
+50,Nova Zelândia,242.7
+51,Peru,239.33
+52,Cazaquistão,224.34
+53,Grécia,222.01
+54,Catar,221.37
+55,Ucrânia,199.72
+56,Argélia,187.16
+57,Hungria,184.65
+58,Kuwait,183.57
+59,Marrocos,142.87
+60,Angola,124.79
+61,Porto Rico,118.68
+62,Equador,115.47
+63,Quénia,114.86
+64,Eslováquia,112.42
+65,República Dominicana,112.42
+66,Etiópia,111.18
+67,Omã,108.97
+68,Guatemala,91.32
+69,Bulgária,85.01
+70,Luxemburgo,82.15
+71,Venezuela,82.14
+72,Bielorrússia,79.7
+73,Uzbequistão,79.12
+74,Tanzânia,76.58
+75,Gana,76.0
+76,Turquemenistão,74.44
+77,Sri Lanka,73.74
+78,Uruguai,71.16
+79,Panamá,71.08
+80,Azerbaijão,70.07
+81,Croácia,69.38
+82,Costa do Marfim,68.63
+83,Costa Rica,68.49
+84,Lituânia,68.03
+85,República Democrática do Congo,63.91
+86,Sérvia,62.72
+87,Eslovénia,62.19
+88,Myanmar,59.53
+89,Uganda,48.35
+90,Jordânia,48.07
+91,Tunísia,46.28
+92,Camarões,44.21
+93,Bahrein,43.54
+94,Bolívia,43.43
+95,Sudão,42.76
+96,Paraguai,41.86
+97,Líbia,40.84
+98,Letónia,40.59
+99,Estónia,39.05
+100,Nepal,39.03
+101,Zimbabwe,38.28
+102,El Salvador,31.99
+103,Papua-Nova Guiné,31.36
+104,Honduras,30.57
+105,Trinidad e Tobago,29.34
+106,Camboja,28.33
+107,Islândia,27.7
+108,Iémen,27.59
+109,Senegal,27.54
+110,Zâmbia,27.02
+111,Chipre,26.7
+112,Geórgia,25.17
+113,Bósnia e Herzegovina,23.68
+114,Macau,23.42
+115,Gabão,22.22
+116,Haiti,20.18
+117,Afeganistão,20.14
+118,Guiné,19.74
+119,Palestina,19.7
+120,Brunei,18.46
+121,Mali,18.43
+122,Burquina Fasso,18.27
+123,Albânia,18.26
+124,Líbano,24.49
+125,Botswana,18.0
+126,Moçambique,17.87
+127,Arménia,17.69
+128,Benim,17.55
+129,Malta,17.16
+130,Guiné Equatorial,16.88
+131,Laos,16.25
+132,Jamaica,16.1
+133,Mongólia,15.72
+134,Nicarágua,15.7
+135,Madagascar,15.11
+136,Guiana,14.84
+137,Níger,14.64
+138,Congo,14.49
+139,Macedônia do Norte,14.1
+140,Moldávia,14.05
+141,Chade,12.94
+142,Bahamas,12.69
+143,Namíbia,12.49
+144,Ruanda,12.1
+145,Malawi,11.55
+146,Maurícia,11.5
+147,Mauritânia,10.09
+148,Tajiquistão,9.98
+149,Quirguistão,9.75
+150,Kosovo,9.24
+151,Somália,8.42
+152,Togo,8.36
+153,Montenegro,6.13
+154,Maldivas,5.9
+155,Barbados,5.79
+156,Fiji,4.86
+157,Sudão do Sul,4.78
+158,Eswatini,4.67
+159,Serra Leoa,4.1
+160,Libéria,3.9
+161,Djibouti,3.72
+162,Burundi,3.69
+163,Aruba,3.5
+164,Andorra,3.3
+165,Suriname,3.01
+166,Butão,2.71
+167,Belize,2.68
+168,Lesoto,2.51
+169,República Centro-Africana,2.49
+170,Timor-Leste,2.46
+171,Eritreia,2.37
+172,Gâmbia,2.17
+173,Cabo Verde,2.05
+174,Seicheles,2.0
+175,Santa Lúcia,1.97
+176,Antígua e Barbuda,1.69
+177,Guiné-Bissau,1.62
+178,San Marino,1.62
+179,Ilhas Salomão,1.6
+180,Comores,1.24
+181,Granada,1.19
+182,São Cristóvão e Nevis,1.12
+183,Vanuatu,0.98
+184,São Vicente e Granadinas,0.95
+185,Samoa,0.83
+186,Domínica,0.6
+187,São Tomé e Príncipe,0.51
+188,Tonga,0.5
+189,Estados Federados da Micronésia,0.43
+190,Ilhas Marshall,0.27
+191,Palau,0.23
+192,Kiribati,0.21
+193,Nauru,0.13
+194,Tuvalu,0.06

@@ -2,7 +2,6 @@
 
 import pandas as pd
 import numpy as np
-import glob
 import requests
 from bs4 import BeautifulSoup
 import sqlite3
@@ -31,10 +30,11 @@ def extrair(url, atributos_tabela):
     for row in rows:
         col = row.find_all('td')
         if len(col) != 0:
-            if col[0].find('a') is not None and '—' not in col[2]:
+            pib_text = col[2].get_text(strip=True)
+            if col[0].find('a') is not None and pib_text not in ['—', '-', '']:
                 dicionario = {
                     "Pais/Territorio": col[0].a.contents[0],
-                    "PIB": col[2].contents[0]
+                    "PIB": pib_text
                 }
                 df1 = pd.DataFrame(dicionario, index=[0])   
                 df = pd.concat([df, df1], ignore_index=True)
@@ -42,10 +42,19 @@ def extrair(url, atributos_tabela):
     return df
 
 def transformar(df):
-    lista_PIB = df["PIB"].tolist()
-    lista_PIB = [float("".join(x.split(','))) for x in lista_PIB]
-    lista_PIB = [np.round(x/1000, 2) for x in lista_PIB]
-    df["PIB"] = lista_PIB
+    # Substitui a vírgula por nada para tratar o formato americano (milhar)
+    # Se o site usar vírgula como decimal, ajuste conforme necessário
+    df["PIB"] = df["PIB"].str.replace(',', '', regex=True)
+    
+    # Converte para float, forçando erros a virarem NaN (Not a Number)
+    df["PIB"] = pd.to_numeric(df["PIB"], errors='coerce')
+    
+    # Remove linhas que por ventura ficaram vazias (NaN)
+    df = df.dropna(subset=["PIB"])
+    
+    # Realiza o cálculo e arredondamento
+    df["PIB"] = np.round(df["PIB"] / 1000, 2)
+    
     df = df.rename(columns={"PIB": "PIB_Bilhoes"})
     return df
 
@@ -84,11 +93,11 @@ log_processos('Preliminares completas. Inicializando o ETL process')
 df = extrair(url, atributos_tabela)
 print(df.head())
 
-log_processos("processo de extração completo, inicializando processo de transformação")
+log_processos("processo de extração completo, inicializando processo de transformacao")
 
 df = transformar(df)
 
-log_processos("Transformação de dados completo. inicalizando oc arregamento dos dados")
+log_processos("Transformacao de dados completo. inicalizando o carregamento dos dados")
 
 carregar_csv(df, csv_path)
 
@@ -96,13 +105,13 @@ log_processos("Dados salvos como CSV")
 
 sql_connection = sqlite3.connect('Economias_Mundo.db')
 
-log_processos('Conexão com o banco de daos iniciada')
+log_processos('Conexao com o banco de daos iniciada')
 
 carregar_db(df, sql_connection, nome_tabela)
 
 log_processos('Dados carregados para banco de dados. Rode a query')
 
-query_statement = f"SELECT * FROM {nome_tabela} WHERE PIB >= 100"
+query_statement = f"SELECT * FROM {nome_tabela} WHERE PIB_Bilhoes >= 100"
 query(query_statement, sql_connection)
 
 log_processos("Processo concluido.")

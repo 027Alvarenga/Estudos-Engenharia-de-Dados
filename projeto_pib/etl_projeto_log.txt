@@ -1,0 +1,7 @@
+2026-26-25-20:19:15: Preliminares completas. Inicializando o ETL process
+2026-26-25-20:19:18: processo de extração completo, inicializando processo de transformação
+2026-26-25-20:19:18: Transformação de dados completo. inicalizando oc arregamento dos dados
+2026-26-25-20:19:18: Dados salvos como CSV
+2026-26-25-20:19:18: Conexão com o banco de daos iniciada
+2026-26-25-20:19:18: Dados carregados para banco de dados. Rode a query
+2026-26-25-20:19:18: Processo concluido.
