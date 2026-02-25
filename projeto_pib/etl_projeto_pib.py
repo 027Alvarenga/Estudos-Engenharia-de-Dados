@@ -9,16 +9,6 @@ import sqlite3
 from datetime import datetime
 
 
-url = 'https://web.archive.org/web/20230824184940/https://pt.wikipedia.org/wiki/Lista_de_pa%C3%ADses_por_PIB_nominal'
-
-atributos_tabela = ["Pais/Territorio", "PIB" ]
-
-nome_db = 'Economias_Mundo.db'
-
-nome_tabela = 'Paises_PIB'
-
-csv_path = 'C:/Estudos Engenharia de Dados/projeto_pib/Paises_PIB.csv'
-
 # Criando função para extrair os dados
 
 def extrair(url, atributos_tabela):
@@ -29,7 +19,7 @@ def extrair(url, atributos_tabela):
     dados = BeautifulSoup(pagina, 'html.parser')
     
     # Crio um dataframe utilizando as colunas criadas com a variável de atributos da tabela
-    df = pd.DataFrame(columns={atributos_tabela })
+    df = pd.DataFrame(columns=atributos_tabela)
     
     # Busca da tag de tbody
     tabela = dados.find_all('tbody')
@@ -48,10 +38,8 @@ def extrair(url, atributos_tabela):
                 }
                 df1 = pd.DataFrame(dicionario, index=[0])   
                 df = pd.concat([df, df1], ignore_index=True)
-                return df
-        else:
-            break
     
+    return df
 
 def transformar(df):
     lista_PIB = df["PIB"].tolist()
@@ -63,9 +51,9 @@ def transformar(df):
 
 def carregar_csv(df, csv_path):
     df.to_csv(csv_path)
-    
-def carregar_db(df, sql_connection, nome_db):
-    df.to_sql(nome_tabela, sql_connection, if_existas='replace', index=False)
+
+def carregar_db(df, sql_connection, nome_tabela):
+    df.to_sql(nome_tabela, sql_connection, if_exists='replace', index=False)
     
 def query(query_statement, sql_connection):
     print(query_statement)
@@ -76,8 +64,48 @@ def log_processos(mensagem):
     timestamp_format = '%Y-%g-%d-%H:%M:%S'
     now = datetime.now()
     timestamp = now.strftime(timestamp_format)
-    with open("./projeto_pib/etl_projeto_log.txt") as f:
+    with open("etl_projeto_log.txt", "a") as f:
         f.write(timestamp + ': ' + mensagem + '\n')
         
+        
+url = 'https://web.archive.org/web/20230824184940/https://pt.wikipedia.org/wiki/Lista_de_pa%C3%ADses_por_PIB_nominal'
+
+atributos_tabela = ["Pais/Territorio", "PIB" ]
+
+nome_db = 'Economias_Mundo.db'
+
+nome_tabela = 'Paises_PIB'
+
+csv_path = 'Paises_PIB.csv'
 # Chamadas de função
+
+
+log_processos('Preliminares completas. Inicializando o ETL process')
 df = extrair(url, atributos_tabela)
+print(df.head())
+
+log_processos("processo de extração completo, inicializando processo de transformação")
+
+df = transformar(df)
+
+log_processos("Transformação de dados completo. inicalizando oc arregamento dos dados")
+
+carregar_csv(df, csv_path)
+
+log_processos("Dados salvos como CSV")
+
+sql_connection = sqlite3.connect('Economias_Mundo.db')
+
+log_processos('Conexão com o banco de daos iniciada')
+
+carregar_db(df, sql_connection, nome_tabela)
+
+log_processos('Dados carregados para banco de dados. Rode a query')
+
+query_statement = f"SELECT * FROM {nome_tabela} WHERE PIB >= 100"
+query(query_statement, sql_connection)
+
+log_processos("Processo concluido.")
+
+sql_connection.close()
+
