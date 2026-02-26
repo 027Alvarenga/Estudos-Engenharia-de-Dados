@@ -93,7 +93,7 @@ log_processos('Preliminares completas. Inicializando o ETL process')
 df = extrair(url, atributos_tabela)
 print(df.head())
 
-log_processos("processo de extração completo, inicializando processo de transformacao")
+log_processos("processo de extracao completo, inicializando processo de transformacao")
 
 df = transformar(df)
 
