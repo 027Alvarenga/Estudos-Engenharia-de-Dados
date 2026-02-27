@@ -43,10 +43,35 @@ def extrair(url, atributos_tabela):
             df = pd.concat([df, df1], ignore_index=True)
     return df
 
+def transformar(df):
+    #remove espaços em branco extras no inicio e fim das strings
+    df['estudante'] = df['estudante'].str.strip().str.upper()
+    
+    # Converte a coluna para o formato datetime do Python
+    df['dt_inscricao'] = pd.to_datetime(df["dt_inscricao"], dayfirst=True)
+    
+    hoje = pd.Timestamp.now()
+    df["dias_na_espera"] = (hoje - df["dt_inscricao"]).dt.days
+    
+    return df
+
+def carregar_dados_csv(df, csv_path):
+    df.to_csv(csv_path)
+    
+def carregar_db(df, sql_connection, nome_tabela):
+    df.to_sql(nome_tabela, sql_connection, if_exists='replace', index=False)
 
 url = 'https://linhares.sisp.com.br/lista-publica/buscar-inscricoes?unidade_id=128&ano_de_escolaridade_id=116&turno_obrigatorio='
 
 atributos_tabela = ["estudante","dt_inscricao","situacao", "criterios_atendidos"]
 
+csv_path = 'lista_de_espera.csv'
+
+
 df = extrair(url, atributos_tabela)
 print(df)
+
+df = transformar(df)
+print(df)
+
+df = carregar_dados_csv(df, csv_path)
