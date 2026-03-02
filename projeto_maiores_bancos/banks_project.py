@@ -2,6 +2,8 @@ import pandas as pd
 import requests 
 from bs4 import BeautifulSoup
 from datetime import datetime
+import numpy as np
+import sqlite3
 
 
 def extrair(url, atributos_tabela):
@@ -12,8 +14,6 @@ def extrair(url, atributos_tabela):
     dados = BeautifulSoup(pagina, 'html.parser')
     df = pd.DataFrame(columns = atributos_tabela)
     tabela = dados.find_all('tbody')
-    # if len(tabela) <= 4:
-    #     raise ValueError(f"A página retornou apenas {len(tabela)} tbody(s); não é possível acessar o índice 3")
     rows = tabela[2].find_all('tr')
     
     
@@ -29,12 +29,21 @@ def extrair(url, atributos_tabela):
         
     return df
     
-    #continuar função
     
 
 def transformar(df):
-    df['mc_gbp_billion'] = float(df['mc_usd_billion'] * 0.75)
-    #Implementar codigo do transformar
+    exchange_rates = pd.read_csv('exchange_rate.csv')
+    rates_dict = exchange_rates.set_index('Currency').to_dict()['Rate']
+    gpb_rate = float(rates_dict['GBP'])
+    eur_rate = float(rates_dict['EUR'])
+    inr_rate = float(rates_dict['INR'])
+    
+    df['mc_usd_billion'] = df['mc_usd_billion'].astype(str).str.replace(',', '')
+    df['mc_usd_billion'] = pd.to_numeric(df['mc_usd_billion'], errors='coerce')
+    
+    df['mc_gbp_billion'] = np.round(df['mc_usd_billion'] * gpb_rate, 2)
+    df['mc_eur_billion'] = np.round(df['mc_usd_billion'] * eur_rate, 2)
+    df['mc_inr_billion'] = np.round(df['mc_usd_billion'] * inr_rate, 2)
     return df
     
     
@@ -42,7 +51,7 @@ def carregar_csv(df, csv_path):
     df.to_csv(csv_path)
     
 def carregar_sql(df, conexao_sql, nome_tabela):
-    df.to_sql( conexao_sql, nome_tabela, if_exists='replace', index=False)
+    df.to_sql(nome_tabela, conexao_sql, if_exists='replace', index=False)
     
     
 def query_statement(query, conexao_sql):
@@ -59,17 +68,24 @@ def log(message):
         f.write(timestamp + ': ' + message + '\n')
 
 
-query1 = f'SELECT Nome, MC_GBP_BILLION FROM LONDRES'
-query2 = f'SELECT Nome, MC_GBP_BILLION FROM BERLIM'
-query3 = f'SELECT Nome, MC_GBP_BILLION FROM NOVA_DÉLHI'
+log('Preliminares completas. Iniciando o processo ETL')
+
+
+query1 = f'SELECT * FROM Largest_banks'
+query2 = f'SELECT AVG(MC_GBP_Billion) FROM Largest_banks'
+query3 = f'SELECT nome from Largest_banks LIMIT 5'
 
 
 url = 'https://en.wikipedia.org/wiki/List_of_largest_banks'
 atributos_tabela = ['nome', 'mc_usd_billion']
 
 
+csv_path = 'Largest_banks_data.csv'
 
-log('Inicio do Processo de ETL')
+banco_bd = 'Banks.db'
+
+tabela = 'Largest_Banks'
+
 
 log('inicio de extracao')
 df = extrair(url, atributos_tabela)
@@ -86,7 +102,21 @@ print(df.head())
 log('Fim de transformacao')
 
 
-log('inicio de carregamento')
+log('Dados salvos no arquivo CSV')
 
+carregar_csv(df, csv_path)
 
-log('fim de carregamento')
+log('Conexao SQL iniciada')
+
+sql_connection = sqlite3.connect('Banks.db')
+
+log('Dados carregados no Banco de Dados como uma tabela, Executando consultas ')
+carregar_sql(df, sql_connection, tabela)
+
+log('Processo Completo')
+query_statement(query1, sql_connection)
+query_statement(query2, sql_connection)
+query_statement(query3, sql_connection)
+
+log('Conexao com o servidor fechada')
+sql_connection.close()
