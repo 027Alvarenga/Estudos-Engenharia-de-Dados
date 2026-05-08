@@ -3,6 +3,9 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 load_dotenv()
+from sqlalchemy import create_engine
+
+
 
 
 # Função para extrair os dados da API
@@ -38,6 +41,22 @@ def transform(dados_brutos):
         registros.append(registro)
     return pd.DataFrame(registros)
 
+def load(df):
+    database_url = os.getenv('database_url')
+    
+    engine = create_engine(database_url)
+    
+    df.to_sql(
+        'clima_tempo',
+        con=engine,
+        if_exists='append',
+        index=False
+    )
+    
+    print(f'{len(df)} registros inseridos com sucesso!')
+
+
+
 # Lista de Cidades para consulta
 cidades = ['Vitoria', 'São Paulo', 'Rio de Janeiro', 'Belo Horizonte']
 api_key = os.getenv('OPENWEATHER_API_KEY')
@@ -52,3 +71,6 @@ print (f'Total de cidades coletadas: {len(dados_brutos)}')
 DF = transform(dados_brutos)
 print(DF)
 print(DF.dtypes)
+
+# Carregamento no Supabase
+load(DF)
