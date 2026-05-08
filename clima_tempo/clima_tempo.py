@@ -10,7 +10,7 @@ def extract(cidades, api_key):
     resultados = []
     
     for cidade in cidades:
-        url = f'https://api.openweathermap.org/data/2.5/weather?q={cidade}&APPID={api_key}'
+        url = f'https://api.openweathermap.org/data/2.5/weather?q={cidade}&units=metric&lang=pt_br&APPID={api_key}'
         response = requests.get(url)
         print(f'Cidade: {cidade}, Status Code: {response.status_code}')
 
@@ -47,8 +47,8 @@ api_key = os.getenv('OPENWEATHER_API_KEY')
 dados_brutos = extract(cidades, api_key)
 print (f'Total de cidades coletadas: {len(dados_brutos)}')
 
-    
 # Transformação dos dados
 
 DF = transform(dados_brutos)
 print(DF)
+print(DF.dtypes)
