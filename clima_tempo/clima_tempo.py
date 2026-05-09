@@ -88,7 +88,7 @@ def run():
 if __name__ == '__main__':
     
     # Agenda a execução da função a cada 5 minutos
-    schedule.every(15).seconds.do(run)
+    schedule.every(20).minutes.do(run)
 
     # Executa a primeira vez imediatamente
     run()
