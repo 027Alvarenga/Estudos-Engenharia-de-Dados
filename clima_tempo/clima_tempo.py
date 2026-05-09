@@ -5,6 +5,8 @@ import logging
 from dotenv import load_dotenv
 load_dotenv()
 from sqlalchemy import create_engine
+import schedule
+import time
 
 
 logging.basicConfig(
@@ -62,23 +64,40 @@ def load(df):
 
 
 def run():
-    # Lista de Cidades para consulta
-    cidades = ['Vitoria', 'São Paulo', 'Rio de Janeiro', 'Belo Horizonte']
-    api_key = os.getenv('OPENWEATHER_API_KEY')
-
-    #Inicia o processo de extração dos dados
-
-    dados_brutos = extract(cidades, api_key)
-    logger.info(f'Total de cidades coletadas: {len(dados_brutos)}')
-
-    # Transformação dos dados
-
-    DF = transform(dados_brutos)
-    logger.info('Transformação dos dados concluída com sucesso')
-
-    # Carregamento no Supabase
-    load(DF)
-    logger.info('Processo ETL concluído com sucesso')
     
+    try:
+        # Lista de Cidades para consulta
+        cidades = ['Vitoria', 'São Paulo', 'Rio de Janeiro', 'Belo Horizonte']
+        api_key = os.getenv('OPENWEATHER_API_KEY')
+
+        #Inicia o processo de extração dos dados
+
+        dados_brutos = extract(cidades, api_key)
+        
+        if dados_brutos:
+            DF = transform(dados_brutos)
+            load(DF)
+            logger.info('Processo ETL concluído com sucesso')
+        else:
+            logger.warning('Nenhum dado extraído nesse ciclo.')
+        logger.info(f'Total de cidades coletadas: {len(dados_brutos)}')
+    except Exception as e:
+        logger.error(f'Erro crítico durante a execução: {e}')
+        
+        
 if __name__ == '__main__':
+    
+    # Agenda a execução da função a cada 5 minutos
+    schedule.every(15).seconds.do(run)
+
+    # Executa a primeira vez imediatamente
     run()
+    
+    logger.info('Agendador iniciado. Pressione Ctrl+C para interromper.')
+    
+    # Loop infinito para manter o agendador rodando
+    while True:
+        schedule.run_pending()
+        time.sleep(1) # espera 1 segundo para evitar uso excessivo de CPU
+    
+    
