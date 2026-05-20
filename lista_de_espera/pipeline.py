@@ -35,4 +35,5 @@ def run():
 
 
 if __name__ == '__main__':
+    # O processo completo está demorando 18 minutos e 57 segundos.
     run()

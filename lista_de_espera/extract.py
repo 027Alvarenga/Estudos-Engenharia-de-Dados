@@ -25,12 +25,17 @@ def extract(consulta):
             dados = response.json()
             inscricoes = dados.get('inscricoes', [])
             
+            em_espera = [ 
+                         i for i in inscricoes 
+                         if i.get('str_status') == 'Cadastro de Reserva'
+                         ]
+            
             resultado = {
                'unidade_id': consulta['unidade_id'],
                 'nome_unidade': consulta['nome_unidade'],
                 'ano_de_escolaridade_id': consulta['ano_de_escolaridade_id'],
                 'nome_ano': consulta['nome_ano'],
-                'total_espera': len(inscricoes)
+                'total_espera': len(em_espera)
             }
             
             logger.info(f"Consulta Realizada com sucesso: {consulta['nome_unidade']} /"
